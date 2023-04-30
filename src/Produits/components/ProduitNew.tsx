@@ -1,22 +1,19 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TProduit } from "../Types/TProduit";
 import { BASEURL } from "../../Constants/base_url";
 import { TResponse } from "../Types/TResponse";
 import { NO_PRODUIT } from "../../Constants/NoProduit";
+import { DEFAULT_PRODUIT } from "../../Constants/DefaultProduit";
+import { ProduitsContext } from "../../Contexts/ProduitsContext";
 
 export function ProduitNew( props : {
-  produits : TProduit[],
-  setProduits : (value : TProduit[] ) => void,
   setProduit : (value : TProduit ) => void
 }) {
-  const {produits , setProduits, setProduit} = props
+  const { setProduit} = props ;
+  
+  const {produits, setProduits} = useContext(ProduitsContext);
 
-  const [item, setItem] = useState<TProduit>({
-    id: -1,
-    nom: "Nouveau Produit",
-    prix: 0,
-    quantite: 1,
-  });
+  const [item, setItem] = useState<TProduit>(DEFAULT_PRODUIT);
 
   const itemHandlerTextuel = (value: string) => {
     const newItem = { ...item };
@@ -38,7 +35,6 @@ export function ProduitNew( props : {
   };
 
   const createNewProduit = async () => {
-    console.log(item);
     const {id, ...leReste } = item
     const options = {
       method: 'POST',
